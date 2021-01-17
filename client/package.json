@@ -2,10 +2,14 @@
   "name": "toss",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "dependencies": {
+    "@material-ui/core": "^4.11.0",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
+    "axios": "^0.21.0",
+    "cors": "^2.8.5",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
     "react-google-login": "^5.1.22",
@@ -35,6 +39,5 @@
   },
   "devDependencies": {
     "react-router-dom": "^5.1.2"
-  },
-  "proxy": "http://localhost:3000"
+  }
 }

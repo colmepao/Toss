@@ -1,27 +1,29 @@
 const mongoose = require('mongoose');
-const dotenv = require('dotenv');
 const express = require('./express.js');
+const dotenv = require('dotenv');
+const path = require('path');
 
-dotenv.config({ path: './config/config.env' });
+dotenv.config({ path: 'server/config/config.env' });
 
-/*
-const DB_TD = process.env.DATABASE_URI;
-mongoose
-  .connect(DB_TD, {
-    useNewUrlParser: true,
-    useCreateIndex: true,
-    useFindAndModify: false,
-  })
-  .then((con) => {
-    console.log(con.connections);
-    console.log('DB connection successful');
-  });
-*/
+process.on('uncaughtException', (err) => {
+    console.log(err.name, err.message);
+    console.log('UNHANDLED EXCEPTION! Shutting down...');
+    process.exit(1);
+});
+ 
+// Use env port or default
+const port = process.env.PORT;
 
-const port = process.env.PORT || 3000;
+const app = express.init()
 
-const app = express.init();
-
-app.listen(port, () => {
-  console.log(`App running on port ${port}...`);
+const server = app.listen(port, () => {
+    console.log(`App running on port ${port}...`);
+});
+  
+process.on('unhandledRejection', (err) => {
+    console.log(err.name, err.message);
+    console.log('UNHANDLED REJECTION! Shutting down...');
+    server.close(() => {
+        process.exit(1);
+    });
 });

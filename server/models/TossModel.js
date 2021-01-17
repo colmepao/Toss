@@ -8,7 +8,7 @@ const model = {
   _id: { $oid: '5f99c419ad05fd8e97da3485' },
   date: { date: '2020-10-28T04:00:00.000Z' },
   prompt:
-    'Should the supreme court nomination have been tabled until after the election?',
+    'Should the supreme court nomination have been tabled until after an election?',
   userResponses: [
     {
       userID: 'colmepao',
@@ -39,8 +39,22 @@ const tossSchema = new mongoose.Schema({
 
   // One of four categories: Politics, Social, Environment, Science and Technology
   category: {
-    type: String,
-    required: [true, 'A toss must have a phase'],
+    science: {
+      type: Boolean,
+      default: 0,
+    },
+    politics: {
+      type: Boolean,
+      default: 0,
+    },
+    environment: {
+      type: Boolean,
+      default: 0,
+    },
+    society: {
+      type: Boolean,
+      default: 0,
+    },
   },
 
   // Phase 0 = hasn't started
@@ -61,10 +75,27 @@ const tossSchema = new mongoose.Schema({
   // Stored by objectIDs (var: _id)
   userResponses: [
     {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Response',
+      responseID: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Response',
+      },
+      userID: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+      },
+      MFTScore: {
+        type: Number,
+        default: 0,
+      },
     },
   ],
+});
+
+tossSchema.pre('aggregate', function (next) {
+  if (this.userResponses === undefined) {
+    this.userResponses = [];
+  }
+  next();
 });
 
 module.exports = mongoose.model('Toss', tossSchema);
